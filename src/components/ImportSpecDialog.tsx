@@ -140,10 +140,10 @@ export default function ImportSpecDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl dark:bg-gray-900 dark:border-gray-700">
         <DialogHeader>
-          <DialogTitle>Import OpenAPI Spec</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="dark:text-gray-100">Import OpenAPI Spec</DialogTitle>
+          <DialogDescription className="dark:text-gray-400">
             Upload an OpenAPI/Swagger specification file (YAML or JSON) to automatically
             generate endpoint collections.
           </DialogDescription>
@@ -151,11 +151,11 @@ export default function ImportSpecDialog({
 
         {/* Loading Overlay */}
         {loading && (
-          <div className="absolute inset-0 bg-white/95 z-50 flex items-center justify-center rounded-lg">
+          <div className="absolute inset-0 bg-white/98 dark:bg-gray-900/98 z-50 flex items-center justify-center rounded-lg backdrop-blur-sm">
             <div className="text-center">
-              <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
-              <p className="text-lg font-semibold text-gray-900 mb-2">Processing...</p>
-              <p className="text-sm text-gray-600">{loadingStep}</p>
+              <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600 dark:text-blue-400" />
+              <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Processing...</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">{loadingStep}</p>
             </div>
           </div>
         )}
@@ -163,8 +163,8 @@ export default function ImportSpecDialog({
         <div className="space-y-4 py-4">
           {/* File Upload */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Upload File</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+            <label className="text-sm font-medium dark:text-gray-200">Upload File</label>
+            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
               <input
                 type="file"
                 accept=".json,.yaml,.yml"
@@ -177,11 +177,11 @@ export default function ImportSpecDialog({
                 htmlFor="file-upload"
                 className="cursor-pointer flex flex-col items-center gap-2"
               >
-                <Upload className="w-8 h-8 text-gray-400" />
-                <span className="text-sm text-gray-600">
+                <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                <span className="text-sm text-gray-600 dark:text-gray-300">
                   {file ? file.name : 'Click to upload or drag and drop'}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   OpenAPI 3.0/3.1, Swagger 2.0 (JSON or YAML)
                 </span>
               </label>
@@ -200,29 +200,29 @@ export default function ImportSpecDialog({
 
           {/* Text Area */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Paste Spec Content</label>
+            <label className="text-sm font-medium dark:text-gray-200">Paste Spec Content</label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Paste your OpenAPI spec here..."
-              className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full h-32 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-md text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
               disabled={loading}
             />
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-red-700">{error}</div>
+            <div className="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-red-700 dark:text-red-300">{error}</div>
             </div>
           )}
 
           {/* Success Message */}
           {success && (
-            <div className="flex items-start gap-2 p-3 bg-green-50 border border-green-200 rounded-md">
-              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-green-700">
+            <div className="flex items-start gap-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-green-700 dark:text-green-300">
                 Successfully imported OpenAPI spec!
               </div>
             </div>
@@ -233,14 +233,14 @@ export default function ImportSpecDialog({
           <button
             onClick={handleClose}
             disabled={loading}
-            className="px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleImport}
             disabled={loading || !content || success}
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             {loading ? 'Importing...' : 'Import Spec'}

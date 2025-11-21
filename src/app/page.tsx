@@ -46,10 +46,10 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Top Bar */}
-      <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-        <h1 className="text-xl font-bold text-gray-900">API Visualizer</h1>
+      <header className="h-14 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">API Visualizer</h1>
         <SettingsMenu />
       </header>
 
@@ -67,7 +67,7 @@ export default function Home() {
           {selectedEndpoint ? (
             <>
               {/* Request Builder - Top Half */}
-              <div className="h-1/2 border-b border-gray-200 overflow-hidden">
+              <div className="h-1/2 border-b border-gray-200 dark:border-gray-700 overflow-hidden">
                 <RequestBuilder
                   endpoint={selectedEndpoint}
                   onResponse={handleResponse}
@@ -79,8 +79,8 @@ export default function Home() {
                 {response ? (
                   <ResponseViewer response={response} endpoint={selectedEndpoint} />
                 ) : (
-                  <div className="h-full flex items-center justify-center bg-white">
-                    <div className="text-center text-gray-500">
+                  <div className="h-full flex items-center justify-center bg-white dark:bg-gray-800">
+                    <div className="text-center text-gray-500 dark:text-gray-400">
                       <p className="text-lg mb-2">No response yet</p>
                       <p className="text-sm">Click "Send" to make a request</p>
                     </div>
@@ -89,8 +89,8 @@ export default function Home() {
               </div>
             </>
           ) : (
-            <div className="h-full flex items-center justify-center bg-white">
-              <div className="text-center text-gray-500">
+            <div className="h-full flex items-center justify-center bg-white dark:bg-gray-800">
+              <div className="text-center text-gray-500 dark:text-gray-400">
                 <p className="text-lg mb-2">No endpoint selected</p>
                 <p className="text-sm">Select an endpoint from the sidebar to get started</p>
               </div>
