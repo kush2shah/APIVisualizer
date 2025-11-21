@@ -6,6 +6,7 @@ import ImportSpecDialog from '@/components/ImportSpecDialog';
 import Sidebar from '@/components/Sidebar';
 import RequestBuilder from '@/components/RequestBuilder';
 import ResponseViewer from '@/components/ResponseViewer';
+import SettingsMenu from '@/components/SettingsMenu';
 import { useCollections } from '@/hooks/useCollections';
 import type { Endpoint, ResponseData } from '@/types';
 
@@ -47,8 +48,9 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Top Bar */}
-      <header className="h-14 bg-white border-b border-gray-200 flex items-center px-6">
+      <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
         <h1 className="text-xl font-bold text-gray-900">API Visualizer</h1>
+        <SettingsMenu />
       </header>
 
       {/* Main Content */}
