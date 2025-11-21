@@ -27,6 +27,7 @@ export default function ImportSpecDialog({
   const [content, setContent] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -54,6 +55,7 @@ export default function ImportSpecDialog({
 
     setLoading(true);
     setError(null);
+    setLoadingStep('Parsing OpenAPI specification...');
 
     try {
       // Detect format
@@ -65,6 +67,8 @@ export default function ImportSpecDialog({
       if (!result.success || !result.spec || !result.endpoints || !result.info) {
         throw new Error(result.error || 'Failed to parse OpenAPI spec');
       }
+
+      setLoadingStep(`Found ${result.endpoints.length} endpoints. Saving to database...`);
 
       // Save to database
       const specId = await db.specs.add({
@@ -81,6 +85,8 @@ export default function ImportSpecDialog({
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+
+      setLoadingStep('Creating endpoint collection...');
 
       // Save all endpoints
       for (const endpoint of result.endpoints) {
@@ -101,6 +107,7 @@ export default function ImportSpecDialog({
         });
       }
 
+      setLoadingStep('Import complete!');
       setSuccess(true);
 
       // Close dialog after a brief delay
@@ -113,6 +120,7 @@ export default function ImportSpecDialog({
       setError(err.message || 'Failed to import spec');
     } finally {
       setLoading(false);
+      setLoadingStep('');
     }
   };
 
@@ -140,6 +148,17 @@ export default function ImportSpecDialog({
             generate endpoint collections.
           </DialogDescription>
         </DialogHeader>
+
+        {/* Loading Overlay */}
+        {loading && (
+          <div className="absolute inset-0 bg-white/95 z-50 flex items-center justify-center rounded-lg">
+            <div className="text-center">
+              <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
+              <p className="text-lg font-semibold text-gray-900 mb-2">Processing...</p>
+              <p className="text-sm text-gray-600">{loadingStep}</p>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-4 py-4">
           {/* File Upload */}
