@@ -107,6 +107,25 @@ export default function ImportSpecDialog({
         });
       }
 
+      // Create environment with base URL if servers are defined
+      if (result.info.servers && result.info.servers.length > 0) {
+        setLoadingStep('Creating environment with base URL...');
+
+        // Check if this is the first environment
+        const existingEnvs = await db.environments.toArray();
+        const isFirstEnv = existingEnvs.length === 0;
+
+        await db.environments.add({
+          name: result.info.title,
+          variables: {
+            baseUrl: result.info.servers[0],
+          },
+          isActive: isFirstEnv, // Set as active if it's the first environment
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+
       setLoadingStep('Import complete!');
       setSuccess(true);
 
