@@ -1,0 +1,285 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Pet Store API",
+    "description": "A sample API for managing a pet store",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://petstore3.swagger.io/api/v3"
+    }
+  ],
+  "paths": {
+    "/pet/findByStatus": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Finds Pets by status",
+        "description": "Multiple status values can be provided with comma separated strings",
+        "operationId": "findPetsByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "available",
+              "enum": ["available", "pending", "sold"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pet"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Fluffy",
+                    "category": {
+                      "id": 1,
+                      "name": "Dogs"
+                    },
+                    "status": "available",
+                    "photoUrls": ["https://example.com/fluffy.jpg"]
+                  },
+                  {
+                    "id": 2,
+                    "name": "Whiskers",
+                    "category": {
+                      "id": 2,
+                      "name": "Cats"
+                    },
+                    "status": "available",
+                    "photoUrls": ["https://example.com/whiskers.jpg"]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pet/{petId}": {
+      "get": {
+        "tags": ["pet"],
+        "summary": "Find pet by ID",
+        "description": "Returns a single pet",
+        "operationId": "getPetById",
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of pet to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                },
+                "example": {
+                  "id": 1,
+                  "name": "Fluffy",
+                  "category": {
+                    "id": 1,
+                    "name": "Dogs"
+                  },
+                  "status": "available",
+                  "photoUrls": ["https://example.com/fluffy.jpg"],
+                  "tags": [
+                    {
+                      "id": 1,
+                      "name": "friendly"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/inventory": {
+      "get": {
+        "tags": ["store"],
+        "summary": "Returns pet inventories by status",
+        "description": "Returns a map of status codes to quantities",
+        "operationId": "getInventory",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "available": 45,
+                  "pending": 12,
+                  "sold": 203
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/order": {
+      "post": {
+        "tags": ["store"],
+        "summary": "Place an order for a pet",
+        "description": "Place a new order in the store",
+        "operationId": "placeOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              },
+              "example": {
+                "petId": 1,
+                "quantity": 1,
+                "shipDate": "2024-01-20T10:00:00.000Z",
+                "status": "placed",
+                "complete": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                },
+                "example": {
+                  "id": 10,
+                  "petId": 1,
+                  "quantity": 1,
+                  "shipDate": "2024-01-20T10:00:00.000Z",
+                  "status": "placed",
+                  "complete": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pet": {
+        "type": "object",
+        "required": ["name", "photoUrls"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "name": {
+            "type": "string",
+            "example": "doggie"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "photoUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "pet status in the store",
+            "enum": ["available", "pending", "sold"]
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Dogs"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "petId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 198772
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "example": 7
+          },
+          "shipDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Order Status",
+            "example": "approved",
+            "enum": ["placed", "approved", "delivered"]
+          },
+          "complete": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
